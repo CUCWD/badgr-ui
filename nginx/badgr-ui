@@ -1,0 +1,26 @@
+# Badgr UI configuration
+#
+server {
+        listen 4000 default_server;
+        listen [::]:4000 default_server;
+
+        server_name ec2-3-83-138-228.compute-1.amazonaws.com;
+
+        access_log /concentricsky/badgr-ui/logs/nginx/access.log combined;
+        error_log /concentricsky/badgr-ui/logs/nginx/error.log error;
+
+        # Disables server version feedback on pages and in headers
+        server_tokens off;
+
+        rewrite ^(.*)/favicon.ico$ /icon/favicon.ico last;
+        rewrite ^(.*)/favicon.png$ /icon/favicon.png last;
+
+		root /concentricsky/badgr-ui/dist;
+
+        location / {
+               # This assumes that Angular is setup to handle requests that are sent to index.html and will route all
+               # requests accordingly.
+               # https://www.digitalocean.com/community/questions/nginx-404-error-with-existing-urls-angular-2-one-page-application-with-routing
+               try_files $uri $uri/ /index.html;
+        }
+}
